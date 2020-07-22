@@ -5,13 +5,15 @@ const geocode = (address, callback) => {
     request({
         url,
         json: true
-    }, (error, respone) => {
+    }, (error, {
+        body
+    }) => {
         if (error)
             callback('Unable to connect API', undefined);
-        else if (!respone.body.features.length)
+        else if (!body.features.length)
             callback('not found', undefined);
         else
-            callback(undefined, `latitude is ${respone.body.features[0].center[1]} and longitude is ${respone.body.features[0].center[0]}`);
+            callback(undefined, `latitude is ${body.features[0].center[1]} and longitude is ${body.features[0].center[0]}`);
     });
 }
 

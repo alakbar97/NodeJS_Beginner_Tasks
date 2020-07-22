@@ -6,13 +6,15 @@ const forecast = (address, callback) => {
     request({
         url,
         json: true
-    }, (error, response) => {
+    }, (error, {
+        body
+    }) => {
         if (error)
             callback('Unable to connect API', undefined);
-        else if (response.body.error)
-            callback(response.body.error, undefined);
+        else if (body.error)
+            callback(body.error, undefined);
         else
-            callback(undefined, `${response.body.current.weather_descriptions}. Temprature is ${response.body.current.temperature}. There is ${response.body.current.precip} percent chance of rain`);
+            callback(undefined, `${body.current.weather_descriptions}. Temprature is ${body.current.temperature}. There is ${body.current.precip} percent chance of rain`);
     });
 }
 
