@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
+const forecast = require('./utils/forecast');
 
 const app = express();
 const viewsPath = path.join(__dirname, '../templates/views');
@@ -33,9 +34,21 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
-    res.render('weather', {
-        title: 'This is weather page',
-        name: 'Alakbar'
+    if (!req.query.address)
+        return res.send({
+            error: 'You must provide address'
+        });
+
+    forecast(req.query.address, (error, data) => {
+        if (error)
+            return res.send({
+                error
+            });
+
+        res.send({
+            forecast: data,
+            address: req.query.address
+        });
     });
 });
 
